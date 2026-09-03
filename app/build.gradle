@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'dev.radixen.garagelevel'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'dev.radixen.garagelevel'
+        minSdk 24
+        targetSdk 35
+        versionCode 3
+        versionName '0.2.1'
+
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
