@@ -30,9 +30,18 @@ OSM/Overpass ───────> GarageRepository ──> candidate topology 
 
 ## Components
 
-### `TrackingService`
+### Tracking service
 
-Foreground service owning Android sensors/location, OSM refresh cadence and estimator lifecycle. It is the only component that mutates the live estimator session.
+The foreground tracking service owns Android sensors/location, OSM refresh cadence and estimator lifecycle. It is the only runtime path that mutates the active estimator session.
+
+The service is split across a few package-private classes so each concern remains reviewable without introducing a framework or dependency-injection layer:
+
+- `TrackingService.java` — Android service lifecycle, permissions, sensor callbacks and location callbacks.
+- `TrackingServiceBase.java` — shared runtime state, notification handling, telemetry reset/publish helpers and location-fix selection.
+- `TrackingServiceOsm.java` — bounded/throttled Overpass refresh lifecycle and stale-response rejection.
+- `TrackingServiceSession.java` — garage entry/exit state, pressure anchoring, mapped topology promotion, floor updates and manual test controls.
+
+`TrackingService` is the only service declared in the Android manifest; the other classes are implementation helpers in the same package.
 
 ### `PressureFilter`
 
@@ -59,18 +68,19 @@ In-process snapshot handoff. The Activity polls an immutable/copied snapshot rat
 - Android sensor and location callbacks are delivered by Android callbacks/registered handler.
 - Overpass network I/O occurs on a dedicated single-thread executor.
 - UI renders on the main thread every ~500 ms.
-- shared garage-list updates are synchronized;
-- Overpass completion is marshalled to the service main looper and stale request IDs are discarded;
-- estimator/filter public methods are synchronized where stateful.
+- Shared garage-list updates are synchronized.
+- Overpass completion is marshalled to the service main looper and stale request IDs are discarded.
+- Estimator/filter public methods are synchronized where stateful.
 
 For this one-screen prototype, the in-process snapshot keeps lifecycle behavior explicit and dependency-light.
 
 ## Network behavior
 
 - HTTPS only (`usesCleartextTraffic=false`).
-- Public Overpass endpoint.
+- Public Overpass endpoints.
 - Default radius 500 m.
-- Successful map data is refreshed after ~120 seconds or ~250 m of movement. Automatic attempts are additionally limited to at most one every 30 seconds so a failed public endpoint cannot be retried on every location callback; manual refresh is explicit.
+- Successful map data is refreshed after ~120 seconds or ~250 m of movement.
+- Automatic attempts are additionally limited to at most one every 30 seconds so a failed public endpoint cannot be retried on every location callback; manual refresh is explicit.
 - No long-term map cache in this prototype.
 
 The public Overpass service is appropriate only for light experimental use; this repository intentionally does not define a deployment architecture beyond the prototype.
