@@ -1,0 +1,41 @@
+name: Field-test report
+description: Share a garage test result without posting sensitive location history.
+title: "[Field test]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Field reports help characterize failure modes. A garage name/address is not required; describe the structure instead.
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: Samsung Galaxy S8, Android 9
+    validations:
+      required: true
+  - type: input
+    id: garage
+    attributes:
+      label: Garage characteristics
+      placeholder: Enclosed, 2 underground + 6 above-ground levels, ramped decks
+    validations:
+      required: true
+  - type: textarea
+    id: route
+    attributes:
+      label: Physical transitions tested
+      placeholder: Entry deck -> +1 -> +2 -> entry deck
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What the app detected
+    validations:
+      required: true
+  - type: textarea
+    id: disturbances
+    attributes:
+      label: Pressure/environment notes
+      placeholder: Walking/driving, HVAC, windows, doors, unusual weather, etc.

@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible problem in the Android prototype.
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a reproducible problem. Do not include exact private routes or sensitive location information.
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: Phone model and Android version.
+      placeholder: Samsung Galaxy S8, Android 9
+    validations:
+      required: true
+  - type: dropdown
+    id: barometer
+    attributes:
+      label: Barometer available?
+      options: ["Yes", "No", "Unknown"]
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant context
+      description: Garage type, movement direction, HVAC/windows, map-data observations, etc. Avoid exact private locations.
