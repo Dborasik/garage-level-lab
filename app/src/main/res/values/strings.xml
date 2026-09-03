@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Garage Level Lab</string>
+    <string name="osm_attribution">Garage metadata: OpenStreetMap (ODbL)</string>
+</resources>
